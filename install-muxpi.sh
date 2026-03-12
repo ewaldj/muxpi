@@ -13,7 +13,7 @@ mkdir -p muxpi
 
 # download muxpi  
 cd muxpi  
-curl -O https://raw.githubusercontent.com/ewaldj/ejperf/main/muxpi.sh
+curl -O https://raw.githubusercontent.com/ewaldj/muxpi/main/muxpi.sh
 chmod +x muxpi.sh
 cd ..
 echo -e "\n### done - have a nice day - www.jeitler.guru ###\n" 
