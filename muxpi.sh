@@ -14,7 +14,7 @@
 
 DEFAULTCONFIGFILE="muxpi.conf"
 SCRIPTNAME="muxpi.sh" 
-VERSION="0.41"
+VERSION="0.42"
 LOGDIR="./muxpi-logs"
 PREAMBLELOGFILENAME="muxpi"
 
@@ -71,6 +71,16 @@ parse_line() {
             ;;
     esac
 }
+# --- check tmux  --------------------------------------------------------------
+check_tmux() {
+    if command -v tmux >/dev/null 2>&1; then
+        return 0
+    fi
+    printf "\nERROR: tmux is not installed.\n" >&2
+    printf "Please install tmux first. For example on Debian:\n" >&2
+    printf "    sudo apt install tmux\n\n" >&2
+    exit 1
+}
 
 # --- determine how to run the cmd with unbuffered output -----------------------
 detect_run_cmd() {
@@ -93,6 +103,8 @@ detect_run_cmd() {
 }
 
 # --- main ---------------------------------------------------------------------
+
+check_tmux
 
 # --- parse options ------------------------------------------------------------
 while [[ $# -gt 0 ]]; do
