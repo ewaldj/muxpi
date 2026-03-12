@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # muxpi.sh by ewald@jeitler.cc 2026 https://www.jeitler.guru
