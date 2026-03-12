@@ -3,7 +3,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # muxpi.sh by ewald@jeitler.cc 2026 https://www.jeitler.guru
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# codename: muxpi  (Measurement Utility eXtreme for raspberry P) 
+# codename: muxpi  (Measurement Utility eXtreme for raspberry PI) 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # I hope you enjoy measuring, logging, and experimenting with this script. – Ewald
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
