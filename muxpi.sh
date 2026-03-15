@@ -3,7 +3,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # muxpi.sh by ewald@jeitler.cc 2026 https://www.jeitler.guru
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# codename: muxpi  (Measurement Utility eXtreme for raspberry PI) 
+# codename: muxpi  (Measurement Utility eXtreme for raspberry P) 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # I hope you enjoy measuring, logging, and experimenting with this script. – Ewald
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -14,7 +14,7 @@
 
 DEFAULTCONFIGFILE="muxpi.conf"
 SCRIPTNAME="muxpi.sh" 
-VERSION="0.42"
+VERSION="0.43"
 LOGDIR="./muxpi-logs"
 PREAMBLELOGFILENAME="muxpi"
 
@@ -195,6 +195,19 @@ ping -c 10 127.0.0.1
 #   +---------+-----------+-----------+-------------------------------+
 
 EOF
+
+echo
+echo "# -----------------------------------------------------------------------------"
+echo "A sample configuration file has been created."
+echo "Helpful instructions and usage notes are included in the .conf file."
+echo "The following content has been written to it:"
+echo "# -----------------------------------------------------------------------------"
+cat "$DEFAULTCONFIGFILE"
+echo "# -----------------------------------------------------------------------------"
+read -r -p "Press Enter to continue..."
+
+
+
     fi
     CONFIG_FILE=$DEFAULTCONFIGFILE
 fi
