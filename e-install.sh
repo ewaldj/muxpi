@@ -10,7 +10,7 @@ readonly SCRIPT_NAME="$(basename "$0")"
 set -euo pipefail
 
 readonly CUSTOM_GITHUB_TOOLS=(
-    "esplit.py|https://raw.githubusercontent.com/ewaldj/muxpi/main/muxpi.sh"
+    "muxpi.sh|https://raw.githubusercontent.com/ewaldj/muxpi/main/muxpi.sh"
 )
 
 readonly DEFAULT_BINDIR="/usr/local/bin"
