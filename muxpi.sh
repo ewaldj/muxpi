@@ -14,7 +14,7 @@
 
 DEFAULTCONFIGFILE="muxpi.conf"
 SCRIPTNAME="muxpi.sh" 
-VERSION="0.43"
+VERSION="0.44"
 LOGDIR="./muxpi-logs"
 PREAMBLELOGFILENAME="muxpi"
 
@@ -22,7 +22,7 @@ PREAMBLELOGFILENAME="muxpi"
 generate_free_session() {
     while true; do
         rand=$(( (RANDOM % 999) + 1 ))
-        session="EJPERFS${rand}"
+        session="MUXPI${rand}"
         if ! tmux has-session -t "$session" 2>/dev/null; then
             echo "$session"
             return 0
