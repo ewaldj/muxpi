@@ -2,7 +2,7 @@
 
 ## Install muxpi.sh  
 ```
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ewaldj/muxpi/main/install-muxpi.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ewaldj/muxpi/main/e-install.sh)"
 ```
 
 Requirements: tmux and iperf3
