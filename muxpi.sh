@@ -166,33 +166,33 @@ iperf3 -c 127.0.0.1 -u -p 5203 -l 500 -b 2m -S 18
 # Runs ten pings to 127.0.0.1 
 ping -c 10 127.0.0.1 
 
-#   +-----------------------------------------------------------------+
-#   |                         QOS CHEAT SHEET                         |
-#   +---------+-----------+-----------+-------------------------------+
-#   | Class   | DSCP Name | DSCP Dec  | Description                   |
-#   +---------+-----------+-----------+-------------------------------+
-#   | CS0     | CS0       | 0         | Best Effort                   |
-#   | CS1     | CS1       | 8         | Lower Effort / Background     |
-#   | AF11    | AF11      | 10        | Assured Forwarding 1 (low)    |
-#   | AF12    | AF12      | 12        | Assured Forwarding 1 (med)    |
-#   | AF13    | AF13      | 14        | Assured Forwarding 1 (high)   |
-#   | CS2     | CS2       | 16        | OAM / Bulk Data               |
-#   | AF21    | AF21      | 18        | Assured Forwarding 2 (low)    |
-#   | AF22    | AF22      | 20        | Assured Forwarding 2 (med)    |
-#   | AF23    | AF23      | 22        | Assured Forwarding 2 (high)   |
-#   | CS3     | CS3       | 24        | Signaling / Critical Apps     |
-#   | AF31    | AF31      | 26        | Assured Forwarding 3 (low)    |
-#   | AF32    | AF32      | 28        | Assured Forwarding 3 (med)    |
-#   | AF33    | AF33      | 30        | Assured Forwarding 3 (high)   |
-#   | CS4     | CS4       | 32        | Real-Time Apps                |
-#   | AF41    | AF41      | 34        | Assured Forwarding 4 (low)    |
-#   | AF42    | AF42      | 36        | Assured Forwarding 4 (med)    |
-#   | AF43    | AF43      | 38        | Assured Forwarding 4 (high)   |
-#   | CS5     | CS5       | 40        | Interactive Multimedia        |
-#   | EF      | EF        | 46        | Expedited Forwarding (VoIP)   |
-#   | CS6     | CS6       | 48        | Network Control               |
-#   | CS7     | CS7       | 56        | Reserved / Highest Priority   |
-#   +---------+-----------+-----------+-------------------------------+
+#   +-------------------------------------------------------------+
+#   |                         QOS CHEAT SHEET                     |
+#   +---------+-----------+-------+-------------------------------+
+#   | Class   |  Dec 8bit |  Dec  | Description                   |
+#   +---------+-----------+-----------+----------------------------
+#   | CS0     |      0    |   0   | Best Effort                   |
+#   | CS1     |     32    |   8   | Lower Effort / Scavenger      |
+#   | AF11    |     40    |  10   | Assured Forwarding 1 (low)    |
+#   | AF12    |     48    |  12   | Assured Forwarding 1 (med)    |
+#   | AF13    |     56    |  14   | Assured Forwarding 1 (high)   |
+#   | CS2     |     64    |  16   | OAM / Bulk Data               |
+#   | AF21    |     72    |  18   | Assured Forwarding 2 (low)    |
+#   | AF22    |     80    |  20   | Assured Forwarding 2 (med)    |
+#   | AF23    |     88    |  22   | Assured Forwarding 2 (high)   |
+#   | CS3     |     96    |  24   | Signaling / Critical Apps     |
+#   | AF31    |    104    |  26   | Assured Forwarding 3 (low)    |
+#   | AF32    |    112    |  28   | Assured Forwarding 3 (med)    |
+#   | AF33    |    120    |  30   | Assured Forwarding 3 (high)   |
+#   | CS4     |    128    |  32   | Real-Time Apps                |
+#   | AF41    |    136    |  34   | Assured Forwarding 4 (low)    |
+#   | AF42    |    144    |  36   | Assured Forwarding 4 (med)    |
+#   | AF43    |    152    |  38   | Assured Forwarding 4 (high)   |
+#   | CS5     |    160    |  40   | Interactive Multimedia        |
+#   | EF      |    184    |  46   | Expedited Forwarding (VoIP)   |
+#   | CS6     |    192    |  48   | Network Control               |
+#   | CS7     |    224    |  56   | Reserved / Highest Priority   |
+#   +---------+-----------+-----------+----------------------------
 
 EOF
 
