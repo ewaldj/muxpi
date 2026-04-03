@@ -130,13 +130,12 @@ while [[ $# -gt 0 ]]; do
 done
 
 # --- no config file provided --------------------------------------------------
-CONFIG_FILE=""
+# CONFIG_FILE=""
 if [[ -z "$CONFIG_FILE" ]]; then
     if [[ ! -f "$DEFAULTCONFIGFILE" ]]; then
         echo "Creating example configuration file: $DEFAULTCONFIGFILE"
         sleep 2 
         cat > "$DEFAULTCONFIGFILE" <<'EOF'
-# Filename: muxperf.conf
 # -----------------------------------------------------------------------------
 # Example Configuration file for muxperf.sh, defining one command per line to be
 # executed in parallel tmux panes for network-performance testing,
@@ -220,25 +219,13 @@ iperf3  -c 127.0.0.1 -p 5202
 # │ Provider Control       │    7    │  CS7 │  56  │ 224 │    E0   │      │   1  │   1  │   1  │   0  │   0  │   0  │   0  │   0  │
 # ├────────────────────────┴─────────┴──────┴──────┴─────┼─────────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┤
 # │  DSCP = Differentiated Services Code Point (L3)      |  AF = Assured Forwarding                                               |
-# │  ToS = Type of Service  (L3/)             ┼          |  CS = Class Selector                                                   |
+# │  ToS = Type of Service  (L3/)                        |  CS = Class Selector                                                   |
 # │  IPP = IP Precedence    (L3)                         |  DP = Drop Probability                                                 |
 # │  CoS = Class of Service (L2)                         |                                    Version 1.0  by Ewald Jeitler 2026  |
 # └──────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────┘
 EOF
-
-
-echo
-echo "# -----------------------------------------------------------------------------"
-echo "A sample configuration file has been created."
-echo "Helpful instructions and usage notes are included in the .conf file."
-echo "The following content has been written to it:"
-echo "# -----------------------------------------------------------------------------"
 cat "$DEFAULTCONFIGFILE"
-echo "# -----------------------------------------------------------------------------"
 read -r -p "Press Enter to continue..."
-
-
-
     fi
     CONFIG_FILE=$DEFAULTCONFIGFILE
 fi
