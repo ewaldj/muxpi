@@ -14,7 +14,7 @@
 
 DEFAULTCONFIGFILE="muxpi.conf"
 SCRIPTNAME="muxpi.sh" 
-VERSION="0.44"
+VERSION="0.45"
 LOGDIR="./muxpi-logs"
 PREAMBLELOGFILENAME="muxpi"
 
@@ -145,56 +145,87 @@ if [[ -z "$CONFIG_FILE" ]]; then
 # Created by Ewald Jeitler — https://www.jeitler.guru
 # -----------------------------------------------------------------------------
 
-# Starts an iperf3 server on port 5201 with 1-second reports and exits after one client session. 
-iperf3 -s -p 5201 -i 1 -1 
+# LOCAL TEST
+iperf3  -s -p 5201 -i 1 
+iperf3  -c 127.0.0.1 -p 5201 
 
-# Starts an iperf3 server on port 5202 with a 1-second reporting interval.
-iperf3 -s -p 5202 -i 1
+iperf3  -s -p 5202 -i 1 
+iperf3  -c 127.0.0.1 -p 5202 
 
-# Starts an iperf3 server on port 5203 with a 5-second reporting interval.
-iperf3 -s -p 5203 -i 5 
+## Examples of possible commands – there are many more possibilities – let your imagination run wild 
+# -- IPERF SERVER --
+# iperf3 -s -p 5201                                         | Server listen on port 5201 
+# iperf3 -s -p 5202                                         | Server listen on port 5202 
+# iperf3 -s -p 5203 -i 10                                   | Server listen on port 5202 update interval 10 seconds 
 
-# Runs an iperf3 client connecting to 127.0.0.1(localhost) on port 5201 using TCP.
-iperf3 -c 127.0.0.1 -p 5201 
+# -- IPERF CLIENT -- 
+# iperf3 -c <IP> -p 5201 -t 60 -S 0 -P 2                    | Two TCP stream to <IP> port 5201 / 60 secondes / DSCP: AF11
+# iperf3 -c <IP> -p 5202 -t 60 -S 40                        | One TCP stream to <IP> port 5202 / 60 secondes / DSCP: AF11
+# iperf3 -c <IP> -p 5203 -t 60 -S 88                        | One TCP stream to <IP> port 5202 / 60 secondes / DSCP: AF23
 
-# Runs an iperf3 UDP client to localhost on port 5202 with 1000-byte datagrams and 1 Mbit/s bandwidth, and DSCP EF. 
-iperf3 -c 127.0.0.1 -u -p 5202 -l 1000 -b 1m -S 46 
+# IPERF NO DEED FOR A PEER - GENERATE UDP TRAFFIC  
+# iperf -c <IP> -u -b 10m -t 60 -S 0                        | UDP stream to <IP> 10 Mbit/s 60 seconds DSCP=BE    
+# iperf -c <IP> -u -b 10m -t 60 -S 64                       | UDP stream to <IP> 10 Mbit/s 60 seconds DSCP=CS2 
+# iperf -c <IP> -u -b 10m -t 60 -S 184                      | UDP stream to <IP> 10 Mbit/s 60 seconds DSCP=EF 
 
-# Runs an iperf3 UDP client to localhost on port 5203 with 500-byte datagrams and 2 Mbit/s bandwidth, and DSCP EF. 
-iperf3 -c 127.0.0.1 -u -p 5203 -l 500 -b 2m -S 18 
+# -- PING -- 
+# ping -c 10 <IP>                                           | ICMP ECHO to <IP> 10 pakets 
+# ping -T 184 -c 30 -s 700 <IP>                             | ICMP ECHO to <IP> 30 packets DSCP=EF size 700Byte  (Debian)
+# ping -T 88 -c 30 -s 100 <IP>                              | ICMP ECHO to <IP> 30 packets DSCP=AF23 size 100Byte  (Debian)
+# ping -z 184 -c 30 -s 700  <IP>                            | ICMP ECHO to <IP> 15 packets DSCP=EF size 700Byte  (OSX)
+# ping -z 80 -c 30 -s 700  <IP>                             | ICMP ECHO to <IP> 15 packets DSCP=CS4 size 700Byte  (OSX)
 
-# Runs ten pings to 127.0.0.1 
-ping -c 10 127.0.0.1 
+# fping -b 450 -e -l -O 184 -o <IP>                         | FPING to <IP> loop DSCP=EF siz 450Byte 
 
-#   +-------------------------------------------------------------+
-#   |                         QOS CHEAT SHEET                     |
-#   +---------+-----------+-------+-------------------------------+
-#   | Class   |  Dec 8bit |  Dec  | Description                   |
-#   +---------+-----------+-----------+----------------------------
-#   | CS0     |      0    |   0   | Best Effort                   |
-#   | CS1     |     32    |   8   | Lower Effort / Scavenger      |
-#   | AF11    |     40    |  10   | Assured Forwarding 1 (low)    |
-#   | AF12    |     48    |  12   | Assured Forwarding 1 (med)    |
-#   | AF13    |     56    |  14   | Assured Forwarding 1 (high)   |
-#   | CS2     |     64    |  16   | OAM / Bulk Data               |
-#   | AF21    |     72    |  18   | Assured Forwarding 2 (low)    |
-#   | AF22    |     80    |  20   | Assured Forwarding 2 (med)    |
-#   | AF23    |     88    |  22   | Assured Forwarding 2 (high)   |
-#   | CS3     |     96    |  24   | Signaling / Critical Apps     |
-#   | AF31    |    104    |  26   | Assured Forwarding 3 (low)    |
-#   | AF32    |    112    |  28   | Assured Forwarding 3 (med)    |
-#   | AF33    |    120    |  30   | Assured Forwarding 3 (high)   |
-#   | CS4     |    128    |  32   | Real-Time Apps                |
-#   | AF41    |    136    |  34   | Assured Forwarding 4 (low)    |
-#   | AF42    |    144    |  36   | Assured Forwarding 4 (med)    |
-#   | AF43    |    152    |  38   | Assured Forwarding 4 (high)   |
-#   | CS5     |    160    |  40   | Interactive Multimedia        |
-#   | EF      |    184    |  46   | Expedited Forwarding (VoIP)   |
-#   | CS6     |    192    |  48   | Network Control               |
-#   | CS7     |    224    |  56   | Reserved / Highest Priority   |
-#   +---------+-----------+-----------+----------------------------
-
+# ┌───────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────┐
+# │  QOS CHEATSHEET                                                       |                          TOS                          │
+# ├───────────────────────────────────────────────────────────────────────┼──────────────────────────────────┬──────┬─────────────┤
+# │                                                                       │                DSCP              │      |             │
+# ├───────────────────────────────────────────────────────────────────────┼────────────────────┬──────┬──────┼──────┤     ECN     │
+# │                                                                       │       IPP / COS    │  DP  │  DP  │      │             │
+# ├────────────────────────┬─────────┬──────┬──────┬─────┬─────────┬──────┼──────┬──────┬──────┼──────┼──────┼──────┼──────┬──────┤
+# │ Application            │ CoS=IPP │  AF  │ DSCP │ ToS │ ToS HEX │  DP  │ Bit0 │ Bit1 │ Bit2 │ Bit3 │ Bit4 │ Bit5 │ Bit6 │ Bit7 │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Best Effort            │    0    │   BE │  0   │  0  │    0    │      │   0  │   0  │   0  │   0  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Scavenger (Low-Prio)   │    1    │  CS1 │  8   │  32 │    20   │      │   0  │   0  │   1  │   0  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ High-Throughput Data   │    1    │ AF11 │  10  │  40 │    28   │ Low  │   0  │   0  │   1  │   0  │   1  │   0  │   0  │   0  │
+# │ (Transactional)        │    1    │ AF12 │  12  │  48 │    30   │ Med  │   0  │   0  │   1  │   1  │   0  │   0  │   0  │   0  │
+# │                        │    1    │ AF13 │  14  │  56 │    38   │ High │   0  │   0  │   1  │   1  │   1  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ OAM / Monitoring       │    2    │  CS2 │  16  │  64 │    40   │      │   0  │   1  │   0  │   0  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Mission Critical       │    2    │ AF21 │  18  │  72 │    48   │ Low  │   0  │   1  │   0  │   0  │   1  │   0  │   0  │   0  │
+# │ (Low-Latency)          │    2    │ AF22 │  20  │  80 │    50   │ Med  │   0  │   1  │   0  │   1  │   0  │   0  │   0  │   0  │
+# │                        │    2    │ AF23 │  22  │  88 │    58   │ High │   0  │   1  │   0  │   1  │   1  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Call Control/Auth/ AAA │    3    │  CS3 │  24  │  96 │    60   │      │   0  │   1  │   1  │   0  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Video Streaming        │    3    │ AF31 │  26  │ 104 │    68   │ Low  │   0  │   1  │   1  │   0  │   1  │   0  │   0  │   0  │
+# │                        │    3    │ AF32 │  28  │ 112 │    70   │ Med  │   0  │   1  │   1  │   1  │   0  │   0  │   0  │   0  │
+# │                        │    3    │ AF33 │  30  │ 120 │    78   │ High │   0  │   1  │   1  │   1  │   1  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Real-Time Interactive  │    4    │  CS4 │  32  │ 128 │    80   │      │   1  │   0  │   0  │   0  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Video Conferencing     │    4    │ AF41 │  34  │ 136 │    88   │ Low  │   1  │   0  │   0  │   1  │   0  │   0  │   0  │   0  │
+# │                        │    4    │ AF42 │  36  │ 144 │    90   │ Med  │   1  │   0  │   0  │   1  │   0  │   0  │   0  │   0  │
+# │                        │    4    │ AF43 │  38  │ 152 │    98   │ High │   1  │   0  │   0  │   1  │   1  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Signaling (SIP/SCCP)   │    5    │  CS5 │  40  │ 160 │    A0   │      │   1  │   0  │   1  │   0  │   0  │   0  │   0  │   0  │
+# │ Telephony (VoIP)       |    5    │   EF │  46  │ 184 │    B8   │      │   1  │   0  │   1  │   1  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Routing/Control        │    6    │  CS6 │  48  │ 192 │    C0   │      │   1  │   1  │   0  │   0  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┼─────────┼──────┼──────┼─────┼─────────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┼──────┤
+# │ Provider Control       │    7    │  CS7 │  56  │ 224 │    E0   │      │   1  │   1  │   1  │   0  │   0  │   0  │   0  │   0  │
+# ├────────────────────────┴─────────┴──────┴──────┴─────┼─────────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┤
+# │  DSCP = Differentiated Services Code Point (L3)      |  AF = Assured Forwarding                                               |
+# │  ToS = Type of Service  (L3/)             ┼          |  CS = Class Selector                                                   |
+# │  IPP = IP Precedence    (L3)                         |  DP = Drop Probability                                                 |
+# │  CoS = Class of Service (L2)                         |                                    Version 1.0  by Ewald Jeitler 2026  |
+# └──────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────┘
 EOF
+
 
 echo
 echo "# -----------------------------------------------------------------------------"
