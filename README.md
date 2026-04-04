@@ -1,6 +1,6 @@
 # muxpi BETA! 
 
-## Install muxpi.sh  
+## Install/Update  muxpi.sh  
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ewaldj/muxpi/main/e-install.sh)"
 ```
