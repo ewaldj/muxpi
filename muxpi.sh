@@ -152,6 +152,11 @@ iperf3  -s -p 5202 -i 1
 iperf3  -c 127.0.0.1 -p 5202 
 
 ## Examples of possible commands – there are many more possibilities – let your imagination run wild 
+# -- MAU SEND / MAU RECV 
+mau-send -p 5055 --pps 10 -d 239.1.1.10 --sync-port 5066 --dscp 16
+mau-recv -p 5055 -g 239.1.1.10 -sc 1  --sender-ip 127.0.0.1 --sync-port 5066 
+mau-recv -p 5055 -g 239.1.1.10 --sender-ip 127.0.0.1 --sync-port 5066 
+
 # -- IPERF SERVER --
 # iperf3 -s -p 5201                                         | Server listen on port 5201 
 # iperf3 -s -p 5202                                         | Server listen on port 5202 
